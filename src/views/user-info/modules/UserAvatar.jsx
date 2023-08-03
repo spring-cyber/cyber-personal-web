@@ -2,6 +2,7 @@ import { VueCropper } from 'vue-cropper';
 import { Modal } from 'cyber-web-ui';
 import { Upload as AUpload, Button as AButton, message } from 'ant-design-vue';
 import { defineComponent, reactive, getCurrentInstance } from 'vue';
+import axios from '@/api';
 import "vue-cropper/dist/index.css";
 import './UserAvatar.less';
 
@@ -56,8 +57,8 @@ export default defineComponent({
           formData.append("avatarfile", avatarfile);
           
           try {
-            let res = await proxy.$axios.request({
-              url: '/auth/user/profile/avatar',
+            let res = await axios.request({
+              url: '/personal/user/avatar',
               method: 'post',
               headers: { 'Content-Type': 'multipart/form-data' },
               data: formData,

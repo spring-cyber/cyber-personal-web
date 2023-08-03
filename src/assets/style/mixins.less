@@ -1,91 +1,3 @@
-// 正文
-.main-body {
-  color: @main-body-color;
-  font-size: @main-body-size;
-  font-weight: @main-body-weight;
-}
-// 正文重要
-.main-body-deepen {
-  color: @main-body-deepen-color;
-  font-size: @main-body-deepen-size;
-  font-weight: @main-body-deepen-weight;
-}
-// 正文提示
-.main-body-tip {
-  color: @main-body-tip-color;
-  font-size: @main-body-tip-size;
-  font-weight: @main-body-tip-weight;
-}
-// 大标题
-.big-title {
-  color: @big-title-color;
-  font-size: @big-title-size;
-  font-weight: @big-title-weight;
-}
-// 一级标题
-.first-title {
-  color: @first-title-color;
-  font-size: @first-title-size;
-  font-weight: @first-title-weight;
-}
-// 二级标题
-.second-title {
-  color: @second-title-color;
-  font-size: @second-title-size;
-  font-weight: @second-title-weight;
-}
-// 小标题
-.small-title {
-  color: @small-title-color;
-  font-size: @small-title-size;
-  font-weight: @small-title-weight;
-}
-.flex-center {
-  display: flex;
-  align-items: center;
-}
-.flex-center-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.flex-between {
-  display: flex;
-  justify-content: space-between;
-}
-.flex-between-center {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.flex-column {
-  display: flex;
-  flex-direction: column;
-}
-.flex-column-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.flex-column-center-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.flex-column-center-between {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-}
-.flex-end-center {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-
 // 超出省略
 .ellipsis {
   overflow: hidden;
@@ -109,12 +21,6 @@
 .primary-color {
   color: @primary-color;
 }
-.dark-color {
-  color: @dark-color;
-  &::selection {
-    background: @dark-color;
-  }
-}
 .warning-color {
   color: @warning-color;
   &::selection {
@@ -126,33 +32,6 @@
   &::selection {
     background: @error-color;
   }
-}
-.classic-color {
-  color: @classic-color;
-  &::selection {
-    background: @classic-color;
-  }
-}
-.gray-color {
-  color: @gray-color;
-  &::selection {
-    background: @gray-color;
-  }
-}
-.block {
-  display: block;
-}
-.inline-block {
-  display: inline-block;
-}
-.disabled-cursor {
-  cursor: not-allowed;
-}
-.wait-cursor {
-  cursor: wait;
-}
-.progress-cursor {
-  cursor: progress;
 }
 
 .warning-input.ant-input {

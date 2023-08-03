@@ -1,12 +1,10 @@
 import router from './router';
-import { nextTick } from 'vue';
-import { permissionStore, dictStore, userStore, configStore } from './store';
-import defaultDict from './store/modules/defaultDict';
+import { permissionStore, userStore, configStore } from './store';
 import { getToken, changeLocation, removeToken } from 'cyber-web-ui';
 
 const modules = import.meta.glob(['./views/**/*.vue', '!./views/**/modules/*.vue']);
 
-const whiteList = ['/login'];
+const whiteList = import.meta.env.MODE === 'development' ? ['/login'] : [];
 
 router.beforeEach(async (to, from, next) => {
   if(!configStore().isAcquire) {
@@ -57,11 +55,3 @@ function getReplacePath(replacePath) {
   if(!replacePath.includes(path)) return changeLocation(replacePath);
   return replacePath.replace(path, '');
 }
-
-nextTick(async () => {
-  // 初始化本地字典
-  const $dictStore = dictStore();
-  Object.keys((defaultDict || {})).forEach(key => {
-    $dictStore.update(key, defaultDict[key], { label: 'label', value: 'value' });
-  });
-})

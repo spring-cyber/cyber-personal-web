@@ -1,41 +1,43 @@
 <template>
-  <c-page-label title="用户权限" icon="cyber-quanxianliebiao" document-link="javascript:;">
-    <template #tips>查看用户的所有授权信息。</template>
-  </c-page-label>
+  <div>
+    <c-page-label title="用户权限" icon="cyber-quanxianliebiao" document-link="#用户权限">
+      <template #tips>查看用户的所有授权信息。</template>
+    </c-page-label>
 
-  <div class="flex">
-    <c-product-tree v-model:value="queryState.productId" isPersonal @change="methods.onChange"></c-product-tree>
+    <div class="flex">
+      <c-product-tree v-model:value="queryState.productId" isPersonal @change="methods.onChange"></c-product-tree>
 
-    <div class="w-0 flex-1 ml-20px">
-      <c-page-wrapper class="h-min-600px">
-        <template #header>
-          <c-collapse-form @search="methods.searchQuery" class="bg-[#EFF1F6]">应用权限</c-collapse-form>
-        </template>
-        
-        <div style="padding: 20px 20px 20px 40px">
-          <g-module-title>角色列表</g-module-title>
-          <a-empty v-if="!permissionState.roleList?.length"></a-empty>
-          <template v-else>
-            <div
-              v-for="(item, index) in permissionState.roleList"
-              :key="item.id"
-              :class="['role-tag', { 'active': permissionState.roleId == item.id }, { 'system-role': item.type == '0' }]"
-              @click="methods.changeRole(item, index)"
-            >
-              <c-icon icon="cyber-jiaose" size="16" class="mr-10px"></c-icon>
-              <span>{{ item.name }}</span>
-            </div>
+      <div class="w-0 flex-1 ml-20px">
+        <c-page-wrapper class="h-min-600px">
+          <template #header>
+            <c-collapse-form @search="methods.searchQuery" class="bg-[#EFF1F6]">应用权限</c-collapse-form>
           </template>
-          <g-module-title>菜单权限</g-module-title>
-          <c-menu-permission
-            isPersonal
-            :value="permissionState.right"
-            disabled
-            :productId="queryState.productId"
-            @fetch="methods.changeMenuList"
-          ></c-menu-permission>
-        </div>
-      </c-page-wrapper>
+          
+          <div style="padding: 20px 20px 20px 40px">
+            <g-module-title>角色列表</g-module-title>
+            <a-empty v-if="!permissionState.roleList?.length"></a-empty>
+            <template v-else>
+              <div
+                v-for="(item, index) in permissionState.roleList"
+                :key="item.id"
+                :class="['role-tag', { 'active': permissionState.roleId == item.id }, { 'system-role': item.type == '0' }]"
+                @click="methods.changeRole(item, index)"
+              >
+                <c-icon icon="cyber-jiaose" size="16" class="mr-10px"></c-icon>
+                <span>{{ item.name }}</span>
+              </div>
+            </template>
+            <g-module-title>菜单权限</g-module-title>
+            <c-menu-permission
+              isPersonal
+              :value="permissionState.right"
+              disabled
+              :productId="queryState.productId"
+              @fetch="methods.changeMenuList"
+            ></c-menu-permission>
+          </div>
+        </c-page-wrapper>
+      </div>
     </div>
   </div>
 </template>
@@ -72,8 +74,9 @@ const methods = {
     }
     try {
       permissionState.roleList = [];
+      // 获取角色列表
       let res = await axios.request({
-        url: '/auth/user/role/select',
+        url: '/personal/permission/product/role',
         method: 'get',
         params: {
           productId: queryState.productId,
@@ -88,12 +91,12 @@ const methods = {
   async changeRole(record) {
     if(record.id == permissionState.roleId) {
       permissionState.roleId = undefined;
-    permissionState.right = permissionState.allRight;
+      permissionState.right = permissionState.allRight;
       return;
     }
     permissionState.roleId = record.id;
     if(!record.info) {
-      record.info = await queryDetail('/auth/role', record);
+      record.info = await queryDetail('/personal/permission/role', record);
     }
     permissionState.right = record.info?.menuIds || [];
   },

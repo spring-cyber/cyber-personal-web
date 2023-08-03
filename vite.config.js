@@ -57,15 +57,6 @@ export default defineConfig(({ command, mode }) => {
       port: 8001,
       strictPort: false,
       cors: true,
-      proxy: {
-        "/gateway": {
-          target: "http://192.168.0.188:8080",
-          changeOrigin: true, 
-          rewrite: (path) => {
-            return path.replace(/\/gateway/, "");
-          },
-        },
-      },
       hmr: true,
     },
     build: {

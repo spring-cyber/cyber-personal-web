@@ -1,57 +1,58 @@
 <template>
-  <c-page-label title="操作轨迹" icon="cyber-caozuoguiji" document-link="javascript:;">
-    <template #tips>维护操作轨迹相关信息。</template>
-  </c-page-label>
+  <div>
+    <c-page-label title="操作轨迹" icon="cyber-caozuoguiji" document-link="#操作轨迹">
+      <template #tips>维护操作轨迹相关信息。</template>
+    </c-page-label>
 
-  <c-table-wrapper
-    rowKey="id"
-    ref="tableRef"
-    v-model:loading="tableState.loading"
-    :columns="tableState.columns"
-    :action="false"
-    @search="methods.searchQuery"
-  >
-    <template #collapse>
-      <a-input
-        v-model:value="queryState.productCode"
-        placeholder="请输入应用名称..."
-        style="width: 200px"
-        @keydown.enter="methods.searchQuery()"
-      >
-        <template #suffix><c-icon icon="cyber-sousuo" size="16" color="#BDBDBD" /></template>
-      </a-input>
-      <c-select
-        width="168"
-        allowClear
-        placeholder="请选择操作结果"
-        v-model:value="queryState.status"
-        :options="$dictStore.operationStatus"
-        @change="methods.searchQuery()"
-      ></c-select>
-      <a-range-picker
-        v-model:value="queryState.time"
-        show-time
-        format="YYYY-MM-DD HH:mm:ss"
-        valueFormat="YYYY-MM-DD HH:mm:ss"
-        @change="methods.searchQuery"
-      />
-    </template>
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.key == 'operTime'">
-        <c-cell icon="cyber-shijian" :title="record.operTime" />
+    <c-table-wrapper
+      rowKey="id"
+      ref="tableRef"
+      v-model:loading="tableState.loading"
+      :columns="tableState.columns"
+      :action="false"
+      @search="methods.searchQuery"
+    >
+      <template #collapse>
+        <a-input
+          v-model:value="queryState.productCode"
+          placeholder="请输入应用名称..."
+          style="width: 200px"
+          @keydown.enter="methods.searchQuery()"
+        >
+          <template #suffix><c-icon icon="cyber-sousuo" size="16" color="#BDBDBD" /></template>
+        </a-input>
+        <c-select
+          width="168"
+          allowClear
+          placeholder="请选择操作结果"
+          v-model:value="queryState.status"
+          :options="OPERATION_RESULT_STATUS"
+          @change="methods.searchQuery()"
+        ></c-select>
+        <a-range-picker
+          v-model:value="queryState.time"
+          show-time
+          format="YYYY-MM-DD HH:mm:ss"
+          valueFormat="YYYY-MM-DD HH:mm:ss"
+          @change="methods.searchQuery()"
+        />
       </template>
-      <template v-if="column.key == 'status'">
-        <c-cell-dict :options="$dictStore.operationResultStatus" :value="record.status" />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key == 'operTime'">
+          <c-cell icon="cyber-shijian" :title="record.operTime" />
+        </template>
+        <template v-if="column.key == 'status'">
+          <c-cell-dict :options="OPERATION_RESULT_STATUS" :value="record.status" />
+        </template>
       </template>
-    </template>
-  </c-table-wrapper>
+    </c-table-wrapper>
+  </div>
 </template>
 
 <script setup>
 import dayjs from 'dayjs';
-import { dictStore } from '@/store';
-import { changeHistoryState, initHistoryState } from 'cyber-web-ui';
-const $dictStore = dictStore();
+import { changeHistoryState, initHistoryState, useDict } from 'cyber-web-ui';
+const { OPERATION_RESULT_STATUS } = useDict({ COMMON: ['OPERATION_RESULT_STATUS'] });
 const tableRef = ref(); // 表格ref
 // 表格请求参数
 const queryState = reactive({
@@ -81,16 +82,14 @@ const methods = {
   // 搜索表格
   searchQuery() {
     changeHistoryState(queryState);
-    let beginTime = queryState.time?.[0];
-    let endTime = queryState.time?.[1];
     unref(tableRef).searchQuery({
-      url: '/auth/opertrack/search',
+      url: '/personal/opertrack/search',
       method: 'get',
       params: {
         ...queryState,
         time: undefined,
-        beginTime: beginTime ? beginTime : undefined,
-        endTime: endTime ? endTime : undefined,
+        startDate: queryState.time?.[0],
+        endDate: queryState.time?.[1],
         sortBy: 'oper_time',
         sortType: 'desc',
       },

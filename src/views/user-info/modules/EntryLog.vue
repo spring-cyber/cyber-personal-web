@@ -30,7 +30,7 @@
         <c-cell icon="cyber-shijian" :title="record.accessTime" />
       </template>
       <template v-if="column.key == 'status'">
-        <c-cell-dict :options="$dictStore.operationResultStatus" :value="record.status" />
+        <c-cell-dict :options="OPERATION_RESULT_STATUS" :value="record.status" />
       </template>
     </template>
   </c-table-wrapper>
@@ -38,9 +38,8 @@
 
 <script setup>
 import dayjs from 'dayjs';
-import { dictStore } from '@/store';
-import { changeHistoryState, initHistoryState } from 'cyber-web-ui';
-const $dictStore = dictStore();
+import { changeHistoryState, initHistoryState, useDict } from 'cyber-web-ui';
+const { OPERATION_RESULT_STATUS } = useDict({ COMMON: ['OPERATION_RESULT_STATUS'] });
 const tableRef = ref(); // 表格ref
 // 表格请求参数
 const queryState = reactive({
@@ -67,16 +66,14 @@ const methods = {
   // 搜索表格
   searchQuery() {
     changeHistoryState(queryState);
-    let startDate = queryState.time?.[0];
-    let endDate = queryState.time?.[1];
     unref(tableRef).searchQuery({
-      url: '/auth/logininfor/search',
+      url: '/personal/user/logininfor/search',
       method: 'get',
       params: {
         ...queryState,
         time: undefined,
-        startDate: startDate ? startDate : undefined,
-        endDate: endDate ? endDate : undefined,
+        startDate: queryState.time?.[0],
+        endDate: queryState.time?.[1],
         sortBy: 'access_time',
         sortType: 'desc',
       },

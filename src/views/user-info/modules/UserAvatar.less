@@ -11,9 +11,14 @@
   }
   &.cyber-avatar-replace {
     cursor: pointer;
+    &:hover {
+      &::after {
+        display: block;
+      }
+    }
     &::after {
       content: '更换';
-      display: block;
+      display: none;
       position: absolute;
       bottom: 0;
       width: 100%;

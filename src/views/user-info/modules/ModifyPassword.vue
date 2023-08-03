@@ -31,8 +31,8 @@
 
 <script setup>
 import axios from '@/api';
-import { required, checkPassword, TRIGGER } from '@/utils/rules';
 import { message } from 'ant-design-vue';
+import { required, checkPassword, encryption, PWD_ENC_KEY } from 'cyber-web-ui';
 const formRef = ref(); // 表单ref
 // 弹窗信息
 const modalState = reactive({
@@ -62,13 +62,17 @@ const methods = {
       try {
         await unref(formRef).validate();
         let res = await axios.request({
-          url: '/auth/user/profile/updatePwd',
+          url: '/personal/user/updatePwd',
           method: 'put',
           headers: { 'Content-Type': 'multipart/form-data' },
-          params: {
-            oldPassword: formState.oldPassword,
-            newPassword: formState.newPassword,
-          },
+          params: encryption({
+              data: {
+              oldPassword: formState.oldPassword,
+              newPassword: formState.newPassword,
+            },
+            param: ['oldPassword', 'newPassword'],
+            key: PWD_ENC_KEY,
+          }),
         });
         message.success(res.message);
         $emit('ok');
